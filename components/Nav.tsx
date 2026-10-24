@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 
 const LINKS = [
   { href: "#proyek", label: "Proyek" },
-  { href: "#stack", label: "Stack" },
+  { href: "#keahlian", label: "Keahlian" },
+  { href: "#perjalanan", label: "Perjalanan" },
   { href: "#kontak", label: "Kontak" },
 ];
 

@@ -39,11 +39,6 @@ const SVM_POINTS = (() => {
   });
 })();
 
-const STACK = [
-  "Node.js", "TypeScript", "Go", "PostgreSQL", "Flutter", "Laravel",
-  "Python", "Docker", "MySQL", "Express.js",
-];
-
 function GithubLinks({ links }: { links: Array<{ label: string; href: string }> }) {
   return (
     <div className="ghs">
@@ -64,14 +59,23 @@ const GH = {
   orderFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/order-processing-system_frontend" },
   absensiBackend: { label: "Backend API", href: "https://github.com/Salman-artz/absensi-dosen-backend" },
   absensiMobile: { label: "Aplikasi Mobile", href: "https://github.com/Salman-artz/absensi-dosen-mobile" },
+  apotekApi: { label: "API", href: "https://github.com/Salman-artz/SaasApotek_API" },
+  apotekFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/SaasApotek_Frontend" },
+  tehBalingBackend: { label: "Backend", href: "https://github.com/Salman-artz/teh-baling-backend" },
+  tehBalingFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/teh-baling-frontend" },
+  libraryApi: { label: "API", href: "https://github.com/Salman-artz/library-asset-management-api" },
+  libraryFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/Library-Asset-Management-Frontend" },
   taskApi: { label: "API", href: "https://github.com/Salman-artz/task-project-management-api" },
   taskFrontend: { label: "Frontend (TaskFlow)", href: "https://github.com/Salman-artz/task-project-management-frontend" },
   ecommerceBackend: { label: "Backend", href: "https://github.com/Salman-artz/e-commerce_backend" },
   ecommerceFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/e-commerce_frontend" },
-  libraryApi: { label: "API", href: "https://github.com/Salman-artz/library-asset-management-api" },
-  libraryFrontend: { label: "Frontend", href: "https://github.com/Salman-artz/Library-Asset-Management-Frontend" },
   profil: { label: "Buka di GitHub", href: "https://github.com/Salman-artz" },
 } as const;
+
+const STACK = [
+  "Go", "TypeScript", "Node.js", "Laravel", "Next.js", "Hono.js", "PostgreSQL",
+  "MySQL", "Flutter", "Prisma", "Drizzle ORM", "gRPC", "NATS", "Docker", "Python",
+];
 
 export default function Projects() {
   const railRef = useRef<HTMLDivElement>(null);
@@ -226,7 +230,7 @@ export default function Projects() {
     <section className="p" id="proyek">
       <h2 className="rv">Proyek di GitHub</h2>
       <p className="lead rv" style={v({ "--d": "100ms" })}>
-        Geser atau seret kartu ke samping untuk melihat semua proyek.
+        Delapan proyek terbaru saya. Geser atau seret kartu ke samping.
       </p>
       <div
         className="carousel"
@@ -265,11 +269,14 @@ export default function Projects() {
             <div className="body">
               <h3>Order Processing System</h3>
               <p>
-                Sistem pesanan event-driven dengan empat microservices dan Saga
-                choreography. Tiap layanan punya database sendiri.
+                Microservices Go untuk order, inventory, payment, dan
+                notification dengan Saga choreography, NATS JetStream, dan gRPC.
+                Frontend Next.js dengan Saga Timeline dan status real-time lewat
+                WebSocket.
               </p>
               <ul className="tags">
-                <li>Go</li><li>NATS</li><li>gRPC</li><li>PostgreSQL</li><li>Docker</li>
+                <li>Go</li><li>Fiber</li><li>NATS JetStream</li><li>gRPC</li>
+                <li>PostgreSQL</li><li>Next.js</li>
               </ul>
               <GithubLinks links={[GH.orderBackend, GH.orderFrontend]} />
             </div>
@@ -312,56 +319,150 @@ export default function Projects() {
               </svg>
             </div>
             <div className="body">
-              <h3>Sistem Absensi Dosen &amp; Presensi Mahasiswa</h3>
+              <h3>Sistem Absensi Dosen &amp; Mahasiswa</h3>
               <p>
-                Absensi berbasis QR dengan JWT RBAC, notifikasi terjadwal,
-                laporan PDF, dan aplikasi Flutter.
+                REST API dan aplikasi Flutter untuk presensi QR Code dengan JWT,
+                RBAC, izin/cuti, notifikasi, laporan PDF, impor Excel, dan
+                dokumentasi Scalar/OpenAPI.
               </p>
               <ul className="tags">
-                <li>Express.js</li><li>TypeScript</li><li>Prisma</li>
-                <li>Flutter</li><li>Riverpod</li>
+                <li>Express</li><li>TypeScript</li><li>PostgreSQL</li>
+                <li>Prisma</li><li>Flutter</li><li>Riverpod</li>
               </ul>
               <GithubLinks links={[GH.absensiBackend, GH.absensiMobile]} />
             </div>
           </article>
 
-          {/* Klasifikasi SVM */}
+          {/* Apotek Digital */}
           <article className="card">
             <div className="art">
               <svg
                 viewBox="0 0 400 200"
                 role="img"
-                aria-label="Animasi titik data dipisahkan oleh batas keputusan SVM"
+                aria-label="Animasi kapsul obat, palang apotek, dan grafik stok"
               >
-                <g id="pts">
-                  {SVM_POINTS.map((p, i) => (
-                    <circle
-                      key={i}
-                      className={p.A ? "dA" : "dB"}
-                      cx={p.cx}
-                      cy={p.cy}
-                      r="5"
-                      style={v({ animationDelay: p.dl + "s" })}
-                    />
-                  ))}
+                <path
+                  className="ok"
+                  d="M72 62h16v22h22v16H88v22H72v-22H50V84h22z"
+                />
+                <g className="cap">
+                  <rect x="110" y="128" width="64" height="28" rx="14" fill="var(--a1)" />
+                  <rect x="142" y="128" width="32" height="28" rx="14" fill="var(--a3)" />
                 </g>
-                <path className="bd" d="M150 10 C230 60 150 120 250 190" />
+                <rect className="bar" x="215" y="60" width="24" height="90" rx="5" />
+                <rect
+                  className="bar"
+                  style={v({ animationDelay: ".4s" })}
+                  x="250" y="60" width="24" height="90" rx="5"
+                />
+                <rect
+                  className="bar"
+                  style={v({ animationDelay: ".8s" })}
+                  x="285" y="60" width="24" height="90" rx="5"
+                />
+                <rect
+                  className="bar"
+                  style={v({ animationDelay: "1.2s" })}
+                  x="320" y="60" width="24" height="90" rx="5"
+                />
+                <line x1="205" y1="152" x2="355" y2="152" stroke="var(--line)" strokeWidth="3" />
+                <text className="t" x="205" y="180">POS FEFO &amp; SatuSehat</text>
               </svg>
             </div>
             <div className="body">
-              <h3>Klasifikasi Status Gizi Balita</h3>
+              <h3>Apotek Digital</h3>
               <p>
-                Skripsi SVM Multiple Kernel Learning pada data IFLS-5 dengan
-                akurasi hingga 99,3%, dalam aplikasi web Flask.
+                Platform SaaS multi-tenant apotek: POS FEFO, inventory,
+                akuntansi, RBAC 6 level, row-locking SELECT FOR UPDATE,
+                integrasi SatuSehat Kemenkes (HL7 FHIR), dan AI Asisten Farmasi
+                dengan Gemini.
               </p>
               <ul className="tags">
-                <li>Python</li><li>Flask</li><li>MySQL</li><li>SVM-MKL</li>
+                <li>Hono.js</li><li>Drizzle ORM</li><li>PostgreSQL</li><li>Next.js 14</li>
               </ul>
-              <GithubLinks links={[GH.profil]} />
+              <GithubLinks links={[GH.apotekApi, GH.apotekFrontend]} />
             </div>
           </article>
 
-          {/* Task & Project Management API */}
+          {/* Teh Baling */}
+          <article className="card">
+            <div className="art">
+              <svg
+                viewBox="0 0 400 200"
+                role="img"
+                aria-label="Animasi geofence 200 meter dengan pin dan pegawai yang bergerak"
+              >
+                <path
+                  d="M20 60H380M20 140H380M90 20V180M230 20V180M320 20V180"
+                  stroke="var(--line)" strokeWidth="6" fill="none"
+                />
+                <circle className="bus" cx="200" cy="100" r="62" fill="none" />
+                <circle className="rg" cx="200" cy="100" r="20" />
+                <path
+                  d="M200 120c-10-14-16-22-16-32a16 16 0 0 1 32 0c0 10-6 18-16 32z"
+                  fill="var(--a3)"
+                />
+                <circle cx="200" cy="88" r="5" fill="#fff" />
+                <circle className="wk" cx="110" cy="100" r="6" fill="var(--a1)" />
+                <text className="t" x="20" y="192">Geofence 200 m, Haversine</text>
+              </svg>
+            </div>
+            <div className="body">
+              <h3>Teh Baling</h3>
+              <p>
+                ERP operasional booth minuman multi-outlet: shift, laporan
+                penjualan, stok, dashboard Recharts, geofencing GPS (Haversine
+                200 m), RBAC 3 level, dan ekspor Excel.
+              </p>
+              <ul className="tags">
+                <li>Hono.js</li><li>Drizzle ORM</li><li>PostgreSQL</li><li>Next.js 14</li><li>Leaflet</li>
+              </ul>
+              <GithubLinks links={[GH.tehBalingBackend, GH.tehBalingFrontend]} />
+            </div>
+          </article>
+
+          {/* Pustaka Sentral */}
+          <article className="card">
+            <div className="art">
+              <svg
+                viewBox="0 0 400 200"
+                role="img"
+                aria-label="Animasi grafik buku terpopuler dan pemindai barcode"
+              >
+                <rect className="hb" style={v({ fill: "var(--a1)" })} x="30" y="36" width="190" height="18" rx="5" />
+                <rect className="hb" style={v({ fill: "var(--a2)", animationDelay: ".3s" })} x="30" y="68" width="150" height="18" rx="5" />
+                <rect className="hb" style={v({ fill: "var(--a3)", animationDelay: ".6s" })} x="30" y="100" width="110" height="18" rx="5" />
+                <rect className="hb" style={v({ fill: "var(--a1)", animationDelay: ".9s" })} x="30" y="132" width="70" height="18" rx="5" />
+                <rect x="262" y="40" width="6" height="60" fill="var(--ink)" />
+                <rect x="270" y="40" width="4" height="60" fill="var(--ink)" />
+                <rect x="276" y="40" width="8" height="60" fill="var(--ink)" />
+                <rect x="286" y="40" width="4" height="60" fill="var(--ink)" />
+                <rect x="296" y="40" width="2" height="60" fill="var(--ink)" />
+                <rect x="302" y="40" width="2" height="60" fill="var(--ink)" />
+                <rect x="310" y="40" width="4" height="60" fill="var(--ink)" />
+                <rect x="316" y="40" width="8" height="60" fill="var(--ink)" />
+                <rect x="326" y="40" width="4" height="60" fill="var(--ink)" />
+                <rect className="bs" x="258" y="32" width="3" height="76" rx="1.5" />
+                <text className="t" x="30" y="180">Sirkulasi, ISBN, SKBP</text>
+              </svg>
+            </div>
+            <div className="body">
+              <h3>Pustaka Sentral</h3>
+              <p>
+                Sistem informasi perpustakaan terpadu: sirkulasi buku, denda
+                otomatis Rp 3.000/hari, pemindai ISBN/barcode, analitik buku
+                terpopuler, dan Surat Bebas Pustaka ber-QR. Clean Architecture
+                dengan Repository-Service, transaksi ACID, Sanctum, dan RBAC.
+              </p>
+              <ul className="tags">
+                <li>PHP 8.3</li><li>Laravel 13</li><li>MySQL</li><li>React 18</li>
+                <li>Vite 5</li><li>Tailwind CSS</li><li>Sanctum</li>
+              </ul>
+              <GithubLinks links={[GH.libraryApi, GH.libraryFrontend]} />
+            </div>
+          </article>
+
+          {/* Task & Project Management */}
           <article className="card">
             <div className="art">
               <svg
@@ -383,19 +484,21 @@ export default function Projects() {
               </svg>
             </div>
             <div className="body">
-              <h3>Task &amp; Project Management API</h3>
+              <h3>Task &amp; Project Management</h3>
               <p>
-                API manajemen tugas dan proyek dengan pembaruan real-time lewat
-                Socket.io.
+                REST API multi-workspace dengan RBAC (Owner, Admin, Member,
+                Viewer), real-time Socket.io, upload Cloudinary, dokumentasi
+                Swagger, dan frontend Next.js.
               </p>
               <ul className="tags">
-                <li>Node.js</li><li>TypeScript</li><li>PostgreSQL</li><li>Socket.io</li>
+                <li>Node.js</li><li>Express</li><li>TypeScript</li>
+                <li>MySQL</li><li>Sequelize</li><li>Socket.io</li>
               </ul>
               <GithubLinks links={[GH.taskApi, GH.taskFrontend]} />
             </div>
           </article>
 
-          {/* E-Commerce API */}
+          {/* E-Commerce Full-Stack */}
           <article className="card">
             <div className="art">
               <svg
@@ -428,51 +531,55 @@ export default function Projects() {
               </svg>
             </div>
             <div className="body">
-              <h3>E-Commerce API</h3>
+              <h3>E-Commerce Full-Stack</h3>
               <p>
-                API toko online dengan alur pembayaran terintegrasi Midtrans dan
-                Xendit.
+                REST API dengan pengurangan stok transaction-safe, auto-cancel
+                order, webhook Midtrans/Xendit, JWT access dan refresh token,
+                serta frontend Nuxt 4 + Vue 3 dengan checkout dan dashboard
+                admin.
               </p>
               <ul className="tags">
-                <li>Node.js</li><li>TypeScript</li><li>PostgreSQL</li>
-                <li>Midtrans</li><li>Xendit</li>
+                <li>Express</li><li>Prisma</li><li>MySQL</li>
+                <li>Nuxt</li><li>Vue</li><li>Midtrans</li>
               </ul>
               <GithubLinks links={[GH.ecommerceBackend, GH.ecommerceFrontend]} />
             </div>
           </article>
 
-          {/* Library & Asset Management API */}
+          {/* Klasifikasi SVM */}
           <article className="card">
             <div className="art">
               <svg
                 viewBox="0 0 400 200"
                 role="img"
-                aria-label="Animasi buku terangkat saat dipindai"
+                aria-label="Animasi titik data dipisahkan oleh batas keputusan SVM"
               >
-                <line
-                  x1="30" y1="152" x2="370" y2="152"
-                  stroke="var(--line)" strokeWidth="3"
-                />
-                <rect className="bk" style={v({ "--k": 0, fill: "var(--a1)" })} x="50" y="60" width="38" height="90" rx="4" />
-                <rect className="bk" style={v({ "--k": 1, fill: "var(--a2)" })} x="98" y="40" width="38" height="110" rx="4" />
-                <rect className="bk" style={v({ "--k": 2, fill: "var(--a3)" })} x="146" y="70" width="38" height="80" rx="4" />
-                <rect className="bk" style={v({ "--k": 3, fill: "var(--a1)" })} x="194" y="50" width="38" height="100" rx="4" />
-                <rect className="bk" style={v({ "--k": 4, fill: "var(--a2)" })} x="242" y="55" width="38" height="95" rx="4" />
-                <rect className="bk" style={v({ "--k": 5, fill: "var(--a3)" })} x="290" y="65" width="38" height="85" rx="4" />
-                <rect className="hs" x="30" y="30" width="3" height="125" />
-                <text className="t" x="30" y="180">Laravel &amp; MySQL</text>
+                <g id="pts">
+                  {SVM_POINTS.map((p, i) => (
+                    <circle
+                      key={i}
+                      className={p.A ? "dA" : "dB"}
+                      cx={p.cx}
+                      cy={p.cy}
+                      r="5"
+                      style={v({ animationDelay: p.dl + "s" })}
+                    />
+                  ))}
+                </g>
+                <path className="bd" d="M150 10 C230 60 150 120 250 190" />
               </svg>
             </div>
             <div className="body">
-              <h3>Library &amp; Asset Management API</h3>
+              <h3>Klasifikasi Status Gizi Balita</h3>
               <p>
-                API pengelolaan perpustakaan dan aset berbasis Laravel dengan
-                database MySQL.
+                Skripsi: klasifikasi stunting dengan SVM dan Multiple Kernel
+                Learning (kernel Linear dan RBF), diimplementasikan sebagai
+                aplikasi web Flask dan MySQL dengan akurasi hingga 99,3%.
               </p>
               <ul className="tags">
-                <li>PHP</li><li>Laravel</li><li>MySQL</li>
+                <li>Python</li><li>Flask</li><li>MySQL</li><li>SVM-MKL</li>
               </ul>
-              <GithubLinks links={[GH.libraryApi, GH.libraryFrontend]} />
+              <GithubLinks links={[GH.profil]} />
             </div>
           </article>
         </div>
@@ -499,7 +606,7 @@ export default function Projects() {
         </button>
       </div>
 
-      <div className="marq" id="stack" aria-label="Teknologi yang saya gunakan">
+      <div className="marq" aria-label="Teknologi yang saya gunakan">
         <div className="track">
           {[0, 1].map((k) =>
             STACK.map((s, i) => (
