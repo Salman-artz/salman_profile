@@ -228,7 +228,7 @@ export default function Projects() {
 
   return (
     <section className="p" id="proyek">
-      <h2 className="rv">Proyek di GitHub</h2>
+      <h2 className="rv">Proyek saya</h2>
       <p className="lead rv" style={v({ "--d": "100ms" })}>
         Delapan proyek terbaru saya. Geser atau seret kartu ke samping.
       </p>
