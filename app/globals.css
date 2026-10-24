@@ -241,6 +241,22 @@ h3.sub.in::after{transform:scaleX(1)}
 #perjalanan h3.sub:nth-of-type(2)::after,#perjalanan h3.sub:nth-of-type(6)::after{transform-origin:center}
 #perjalanan h3.sub:nth-of-type(3)::after,#perjalanan h3.sub:nth-of-type(5)::after{transform-origin:right}
 @media (prefers-reduced-motion:reduce){.js #perjalanan h3.sub{clip-path:none!important;filter:none!important;letter-spacing:0!important;transform:none!important}}
+.stack{position:absolute;inset:0;transform-style:preserve-3d;outline-offset:6px}
+.ph{position:absolute;inset:0;border-radius:28px;overflow:hidden;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);box-shadow:0 40px 80px -30px #000a;background:var(--surface);z-index:calc(10 - var(--p));transform:translate3d(calc(var(--p)*26px),calc(var(--p)*-16px),calc(var(--p)*-55px)) rotate(calc(var(--p)*3deg));filter:brightness(calc(1 - var(--p)*.12));transition:transform .8s cubic-bezier(.2,.9,.2,1),opacity .5s,filter .8s}
+.ph.out{transform:translate3d(118%,-8%,70px) rotate(20deg);opacity:0}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+.stage{position:relative}
+.stack{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.ph.outl{transform:translate3d(-118%,-8%,70px) rotate(-20deg);opacity:0}
+.ph.drag{transition:none;filter:none}
+.stage:hover .cbtn,.stage .cbtn:focus-visible{opacity:1;pointer-events:auto;transform:translateY(-50%) scale(1)}
+.stage .cbtn:hover{background:linear-gradient(100deg,var(--a1),var(--a3));color:#fff;border-color:transparent;transform:translateY(-50%) scale(1.12)}
+.stage .cbtn.prev{left:-.25rem}.stage .cbtn.next{right:-.25rem}
+.sdots{position:absolute;left:50%;bottom:-.25rem;translate:-50% 0;display:flex;gap:.45rem;z-index:6}
+.sdots button{width:9px;height:9px;border-radius:999px;border:0;padding:0;background:var(--line);cursor:pointer;transition:width .3s,background .3s}
+.sdots button.on{width:28px;background:linear-gradient(90deg,var(--a1),var(--a3))}
+@media (hover:hover) and (pointer:fine){.sdots button,.stage .cbtn{cursor:none}}
+@media (max-width:860px){.stage .cbtn{display:none}}
 /* art animations */
 .nd{fill:var(--surface);stroke:var(--line);stroke-width:2;animation:lit 4s infinite}
 .n2{animation-delay:1.3s}.n3{animation-delay:2.6s}.n4{animation-delay:3.6s}
@@ -275,4 +291,6 @@ h3.sub.in::after{transform:scaleX(1)}
 
 @media (min-width:900px){.rail .card{flex-basis:calc((100% - 1.5rem)/2)}}
 @media (min-width:1280px){.rail .card{flex-basis:calc((100% - 3rem)/3)}}
+
+.stage .badge3d,.stage .chip{pointer-events:none}
 

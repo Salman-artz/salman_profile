@@ -9,6 +9,13 @@ const GLYPHS = [
   "{ }", "</>", "=>", "01", "( )", "[ ]", "#", "fn", "&&", "git", "async", "SQL",
 ];
 
+const PHOTOS = [
+  { src: "/stack-1.jpg", alt: "Foto Putra di puncak bukit" },
+  { src: "/stack-2.jpg", alt: "Foto Putra berpose dengan tangan bersilang" },
+  { src: "/stack-3.jpg", alt: "Foto Putra saat menjadi pembicara" },
+  { src: "/stack-4.jpg", alt: "Foto Putra di taman kampus" },
+];
+
 let _gi = 0;
 const NAME_LETTERS = NAME_WORDS.map((w) =>
   [...w].map((c) => ({ c, i: _gi++ }))
@@ -45,7 +52,7 @@ const v = (o: Record<string, string | number>) => o as CSSProperties;
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const tiltRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const roleRef = useRef<HTMLSpanElement>(null);
   const [syms, setSyms] = useState<Sym[]>([]);
@@ -94,12 +101,9 @@ export default function Hero() {
     setSyms(arr);
   }, []);
 
-  /* spotlight, blob parallax, tilt */
+  /* spotlight & blob parallax */
   useEffect(() => {
-    const rm = matchMedia("(prefers-reduced-motion:reduce)").matches;
-    const fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
     const hero = heroRef.current;
-    const tl = tiltRef.current;
     if (!hero) return;
 
     const onSpot = (e: PointerEvent) => {
@@ -112,30 +116,146 @@ export default function Hero() {
       hero.style.setProperty("--py", ((y / b.height - 0.5) * 2).toString());
     };
 
-    let onTilt: ((e: PointerEvent) => void) | null = null;
-    let onTiltLeave: (() => void) | null = null;
-    if (fine && !rm && tl) {
-      onTilt = (e: PointerEvent) => {
-        const b = tl.getBoundingClientRect();
-        const x = (e.clientX - (b.left + b.width / 2)) / innerWidth;
-        const y = (e.clientY - (b.top + b.height / 2)) / innerHeight;
-        tl.style.setProperty("--ty", Math.max(-28, Math.min(28, x * 60)) + "deg");
-        tl.style.setProperty("--tx", Math.max(-20, Math.min(20, -y * 40)) + "deg");
-        tl.style.setProperty("--gx", 50 - x * 100 + "%");
-      };
-      onTiltLeave = () => {
-        tl.style.setProperty("--ty", "0deg");
-        tl.style.setProperty("--tx", "0deg");
-      };
-      hero.addEventListener("pointermove", onTilt);
-      hero.addEventListener("pointerleave", onTiltLeave);
-    }
-
     hero.addEventListener("pointermove", onSpot);
+    return () => hero.removeEventListener("pointermove", onSpot);
+  }, []);
+
+  /* kartu tumpuk foto: klik/seret/keyboard — port dari script HTML v3 */
+  useEffect(() => {
+    const stg = stackRef.current;
+    if (!stg) return;
+    const phs = Array.from(stg.children) as HTMLElement[];
+    const np = phs.length;
+    const rm = matchMedia("(prefers-reduced-motion:reduce)").matches;
+    let cu = 0, busy = false, drag = false, moved = false, dx = 0, x0 = 0, tmr = 0;
+    let pid: number | null = null;
+
+    const lay = () => {
+      phs.forEach((c, i) => c.style.setProperty("--p", String((((i - cu) % np) + np) % np)));
+    };
+
+    const nxt = (left?: boolean) => {
+      if (busy) return;
+      busy = true;
+      const f = phs[cu];
+      if (rm) { cu = (cu + 1) % np; lay(); busy = false; return; }
+      f.classList.add(left ? "outl" : "out");
+      window.setTimeout(() => {
+        f.style.transition = "none";
+        cu = (cu + 1) % np;
+        f.classList.remove("out", "outl");
+        lay();
+        void f.offsetWidth;
+        f.style.transition = "";
+        busy = false;
+      }, 480);
+    };
+
+    const prv = () => {
+      if (busy) return;
+      busy = true;
+      const i = (cu - 1 + np) % np;
+      const t = phs[i];
+      if (rm) { cu = i; lay(); busy = false; return; }
+      t.style.transition = "none";
+      t.classList.add("outl");
+      void t.offsetWidth;
+      t.style.transition = "";
+      t.classList.remove("outl");
+      cu = i;
+      lay();
+      window.setTimeout(() => { busy = false; }, 520);
+    };
+
+    const play = () => {
+      clearInterval(tmr);
+      if (rm) return;
+      tmr = window.setInterval(() => {
+        if (!document.hidden && !drag) nxt();
+      }, 5500);
+    };
+
+    const down = (e: PointerEvent) => {
+      if (busy || (e.pointerType === "mouse" && e.button !== 0)) return;
+      drag = true;
+      moved = false;
+      x0 = e.clientX;
+      dx = 0;
+      pid = e.pointerId;
+      clearInterval(tmr);
+    };
+
+    const move = (e: PointerEvent) => {
+      if (!drag) return;
+      dx = e.clientX - x0;
+      if (!moved && Math.abs(dx) > 6) {
+        moved = true;
+        phs[cu].classList.add("drag");
+        try {
+          if (pid !== null) stg.setPointerCapture(pid);
+        } catch {
+          /* diabaikan */
+        }
+      }
+      if (moved) {
+        phs[cu].style.transform = `translate3d(${dx}px,0,0) rotate(${dx / 16}deg)`;
+      }
+    };
+
+    const end = () => {
+      if (!drag) return;
+      drag = false;
+      const f = phs[cu];
+      if (!moved) {
+        /* klik singkat (termasuk klik pada overlay pointer-events:none) → skip foto */
+        nxt();
+        play();
+        return;
+      }
+      f.classList.remove("drag");
+      f.style.transform = "";
+      if (dx < -60) nxt(true);
+      else if (dx > 60) prv();
+      play();
+    };
+
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prv();
+        play();
+      } else if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        nxt();
+        play();
+      }
+    };
+
+    const enter = () => clearInterval(tmr);
+    const leave = () => {
+      if (!drag) play();
+    };
+
+    stg.addEventListener("pointerdown", down);
+    stg.addEventListener("pointermove", move);
+    stg.addEventListener("pointerup", end);
+    stg.addEventListener("pointercancel", end);
+    stg.addEventListener("keydown", key);
+    stg.addEventListener("pointerenter", enter);
+    stg.addEventListener("pointerleave", leave);
+
+    lay();
+    play();
+
     return () => {
-      hero.removeEventListener("pointermove", onSpot);
-      if (onTilt) hero.removeEventListener("pointermove", onTilt);
-      if (onTiltLeave) hero.removeEventListener("pointerleave", onTiltLeave);
+      clearInterval(tmr);
+      stg.removeEventListener("pointerdown", down);
+      stg.removeEventListener("pointermove", move);
+      stg.removeEventListener("pointerup", end);
+      stg.removeEventListener("pointercancel", end);
+      stg.removeEventListener("keydown", key);
+      stg.removeEventListener("pointerenter", enter);
+      stg.removeEventListener("pointerleave", leave);
     };
   }, []);
 
@@ -307,16 +427,29 @@ export default function Hero() {
 
         <div className="stage" aria-hidden={false}>
           <div className="sway">
-            <div className="tilt" ref={tiltRef}>
+            <div className="tilt">
               <div className="halo" />
               <div className="orbit" />
-              <div className="plate" />
-              <div className="frame">
-                <img
-                  src="/portrait.jpg"
-                  alt="Foto Muhammad Salman Alfarizy Yonda Putra"
-                />
-                <div className="gloss" />
+              <div
+                className="stack"
+                ref={stackRef}
+                tabIndex={0}
+                role="button"
+                aria-label="Ganti foto"
+              >
+                {PHOTOS.map((p, i) => (
+                  <div key={i} className="ph" style={v({ "--p": i })}>
+                    <img
+                      src={p.src}
+                      alt={p.alt}
+                      width={640}
+                      height={853}
+                      decoding="async"
+                      fetchPriority={i === 0 ? "high" : undefined}
+                    />
+                    <div className="gloss" />
+                  </div>
+                ))}
               </div>
               <div className="badge3d">
                 <svg className="rtxt" viewBox="0 0 200 200" aria-hidden="true">
