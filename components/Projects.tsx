@@ -408,7 +408,7 @@ export default function Projects() {
               </svg>
             </div>
             <div className="body">
-              <h3>Teh Baling</h3>
+              <h3>Administrasi Teh Baling Indonesia</h3>
               <p>
                 ERP operasional booth minuman multi-outlet: shift, laporan
                 penjualan, stok, dashboard Recharts, geofencing GPS (Haversine
