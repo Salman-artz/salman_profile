@@ -5,6 +5,7 @@ import Journey from "@/components/Journey";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
 import Reveal from "@/components/Reveal";
+import Resume from "@/components/Resume";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import Skills from "@/components/Skills";
 import SvgSymbols from "@/components/SvgSymbols";
@@ -20,6 +21,7 @@ export default function Home() {
         <Projects />
         <Skills />
         <Journey />
+        <Resume />
       </main>
       <Footer />
       <Reveal />

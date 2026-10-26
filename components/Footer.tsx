@@ -96,7 +96,7 @@ export default function Footer() {
       </div>
       <h2 className="rv">Mari terhubung.</h2>
       <p className="rv" style={v({ "--d": "100ms" })}>
-        Saya mencari peran software engineer tingkat menengah hingga senior.
+        Saya terbuka untuk peluang software engineer dan backend engineer.
         Hubungi saya lewat kanal mana pun di bawah ini.
       </p>
       <div className="contacts">
