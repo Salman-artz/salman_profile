@@ -33,15 +33,17 @@ export default function Cursor() {
 
     const cleanups: Array<() => void> = [];
 
-    document.querySelectorAll("a,.card").forEach((el) => {
-      const enter = () => ring.classList.add("big");
-      const leave = () => ring.classList.remove("big");
-      el.addEventListener("pointerenter", enter);
-      el.addEventListener("pointerleave", leave);
-      cleanups.push(() => {
-        el.removeEventListener("pointerenter", enter);
-        el.removeEventListener("pointerleave", leave);
-      });
+    const onPointerOver = (e: PointerEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("a, button, .card, .btn, .mx, .mnav, .th, [role='button']")) {
+        ring.classList.add("big");
+      } else {
+        ring.classList.remove("big");
+      }
+    };
+    document.addEventListener("pointerover", onPointerOver);
+    cleanups.push(() => {
+      document.removeEventListener("pointerover", onPointerOver);
     });
 
     document.querySelectorAll<HTMLElement>(".card").forEach((c) => {
